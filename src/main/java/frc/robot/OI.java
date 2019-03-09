@@ -9,7 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
+import frc.robot.commands.TurnPIDoff;
 import frc.robot.commands.lowHatch;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -18,10 +21,10 @@ import frc.robot.commands.lowHatch;
 public class OI {
   Joystick _joy = new Joystick(0);
   Button button1 = new JoystickButton(_joy, 1);
-  public OI() {
-
+  public OI() { 
     button1.whenPressed(new lowHatch());
-  } 
+    // button1.whenReleased(new TurnPIDoff());
+  }
   public static double L = 24.05; 
   public static double W = 22.875;
   public static double inch = 200;

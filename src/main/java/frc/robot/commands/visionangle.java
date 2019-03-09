@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -17,14 +18,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class visionangle extends Command {
   boolean done;
   double offset;
-  public visionangle() {
+  public visionangle(double testvar2) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    SmartDashboard.putNumber("testvar2", testvar2);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.drive.readyToRotate();
     //Robot.drive.zero();
   }
 
@@ -36,13 +39,12 @@ public class visionangle extends Command {
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			NetworkTable table = inst.getTable("CVResultsTable");
 			String[] VisionValues = table.getEntry("VisionResults").getString("").split(",");
-			offset = Double.parseDouble(VisionValues[5]);
+			offset = Double.parseDouble(VisionValues[4]);
 		} catch (Exception e) {
-	
-		}
-    if (offset > 40 && offset < 40) {
-      done = true;
     }
+    if (offset > -2 && offset < 2) {
+			done = true;
+		}
   }
 
   // Make this return true when this Command no longer needs to run execute()

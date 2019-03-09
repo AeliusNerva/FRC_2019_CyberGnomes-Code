@@ -37,6 +37,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 	double radians, angle, temp, A2, B2, R, A, B, C, D, ws1, ws2, ws3, ws4, wa1, wa2, wa3, wa4, max, currentAngle,
 			rotationAmmount, FWD, STR, RCW, currentAngle2, currentAngle3, currentAngle4, rotationAmmount2,
 			rotationAmmount3, rotationAmmount4,offsetangle; // defining variables 
+	boolean firstrun = false;
 	// defining motor controlers and encoders
 	WPI_TalonSRX SRXsteer = new WPI_TalonSRX(OI.SRXtoprightsteer);
 	WPI_TalonSRX SRXsteer2 = new WPI_TalonSRX(OI.SRXtopleftsteer);
@@ -173,12 +174,14 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 	public void Swerve() {
 
 		try {
-			zero();
+			//zero();
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			table = inst.getTable("CVResultsTable");
 			VisionValues = table.getEntry("VisionResults").getString("").split(",");
 			XOffset = Double.parseDouble(VisionValues[2]);
-			offsetangle = Double.parseDouble(VisionValues[5]);
+			offsetangle = Double.parseDouble(VisionValues[4]);
+			SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
+			SmartDashboard.putNumber("offset", Double.parseDouble(VisionValues[4]));
 		} catch (Exception e) {
 	
 		}
@@ -239,8 +242,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 		// smartdashboard puts
 
 		// smartdashboard puts
-		SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
-		SmartDashboard.putNumber("offset", Double.parseDouble(VisionValues[4]));
+
 		SmartDashboard.putNumber("Encoder4 Position", SRXsteer4.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Encoder3 Position", SRXsteer3.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Encoder Position", SRXsteer.getSelectedSensorPosition(0));
@@ -524,6 +526,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 	}	
 	public void visionwrite() {
+		
 		try {
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			table = inst.getTable("CVResultsTable");
@@ -544,39 +547,57 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 		MAXdrive3.set(0);
 		MAXdrive4.set(0);
 	}
-	static final double kP = 0.005;
+	static final double kP = 0.02;
     static final double kI = 0.00;
     static final double kD = 0.00;
 	static final double kF = 0.00;
 	static final double kToleranceDegrees = .1f;
 	double rotateToAngleRate;
-	PIDController turnController;		
+	PIDController turnController;
+	public void PIDinit() {
+		try {
+			turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
+		} catch (Exception e) {
+		}
+	}		
 	public void rotateToAngle(){
-		readyToRotate();
+		try {
+		SmartDashboard.putNumber ("RotateAngle", angle);
+		SmartDashboard.putNumber ("Offsetangle", offsetangle);
 		double setpoint = angle + offsetangle;
-		turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
+		SmartDashboard.putNumber("setpoint", setpoint);
        	turnController.setInputRange(-180.0f,  180.0f);
         turnController.setOutputRange(-1.0, 1.0);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
 		turnController.setSetpoint(setpoint);
-		turnController.enable();
+		if (offsetangle > -2 && offsetangle < 2) {
+			SmartDashboard.putString("TurnController", "Disabled");
+			turnController.disable();
+		}
+		else {
+			turnController.enable();
+			SmartDashboard.putString("TurnController", "Enabled");
+		}
 		MAXdrive.set(-rotateToAngleRate);
 		MAXdrive2.set(rotateToAngleRate);
 		MAXdrive3.set(rotateToAngleRate);
 		MAXdrive4.set(-rotateToAngleRate);
+		} catch (Exception e) {
+		}
 	}
 	public void pidWrite(double output) {
         rotateToAngleRate = output;
 	}
 	public void PIDstop(){
 		try {
-			turnController.disable();	
+			turnController.disable();
 		} catch (Exception e) {
 		}
 
 	}
 	public void zero() {
+		
 		Encoder.setPosition(0);
 		Encoder2.setPosition(0);
 		Encoder3.setPosition(0);

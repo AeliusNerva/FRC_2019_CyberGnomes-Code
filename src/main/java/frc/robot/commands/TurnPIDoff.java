@@ -8,18 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
-
-public class Xoffsetlineup extends Command {
-  boolean done;
-  double XOffset;
-  
-
-  public Xoffsetlineup() {
+import frc.robot.*;
+public class TurnPIDoff extends Command {
+  boolean ran = false;
+  public TurnPIDoff() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -27,30 +19,19 @@ public class Xoffsetlineup extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    //Robot.drive.zero();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drive.movesidewaystoposition();
-    try {
-			NetworkTableInstance inst = NetworkTableInstance.getDefault();
-			NetworkTable table = inst.getTable("CVResultsTable");
-			String[] VisionValues = table.getEntry("VisionResults").getString("").split(",");
-			XOffset = Double.parseDouble(VisionValues[2]);
-		} catch (Exception e) {
-	
-		}
-    if (XOffset > -4 && XOffset < 4) {
-      done = true;
-    }
+    Robot.drive.PIDstop();
+    ran = true;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return done;
+    return ran;
   }
 
   // Called once after isFinished returns true

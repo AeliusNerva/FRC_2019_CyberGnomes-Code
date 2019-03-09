@@ -51,7 +51,6 @@ public class Robot extends TimedRobot {
   NetworkTableEntry Area; 
   NetworkTable table;
   // network table init
-  Boolean ran = false;
 
   // public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   // public static OI m_oi; 
@@ -78,7 +77,6 @@ public class Robot extends TimedRobot {
   public static goGogadgetdrive2 drive2 = null;
   public static goGogadgetdrive3 drive3 = null;
   public static lowHatch LowHatch = null;
-  public static Xoffsetlineup ofXoffsetlineup = null;
   public static zeroDrive zeroDrive = null;
   CANSparkMax MAXdrive = new CANSparkMax(OI.MAXtoprightdrive, MotorType.kBrushless);
 	CANSparkMax MAXdrive2 = new CANSparkMax(OI.MAXtopleftdrive, MotorType.kBrushless);
@@ -87,7 +85,8 @@ public class Robot extends TimedRobot {
 	public CANEncoder Encoder = new CANEncoder(MAXdrive);
 	public CANEncoder Encoder2 = new CANEncoder(MAXdrive2);
 	public CANEncoder Encoder3 = new CANEncoder(MAXdrive3);
-	public CANEncoder Encoder4 = new CANEncoder(MAXdrive4);
+  public CANEncoder Encoder4 = new CANEncoder(MAXdrive4);
+  private Boolean ran = false;
 	// defining motor controlers and encoders
   // command and subsystem calls
   /**
@@ -96,11 +95,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    ran = true;
     m_oi = new OI();
 		int kTimeoutMs = 10;
 		int kPIDLoopIdx = 0;
 
-		int absolutePosition = SRXwrist.getSelectedSensorPosition(kTimeoutMs) & 0xFFF;
+    int absolutePosition = SRXwrist.getSelectedSensorPosition(kTimeoutMs) & 0xFFF;
+    double encoderval = 0;
 
 		SRXwrist.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
 		SRXwrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
@@ -152,11 +153,10 @@ public class Robot extends TimedRobot {
     goGoGadget = new goGoGadget();
     LowHatch = new lowHatch();
     //xOfset = new XOfset();
-    ofXoffsetlineup = new Xoffsetlineup();
     
-
+    //drive.PIDinit();
     drive.init();
-
+    drive.PIDinit();
     // command and subsystem calls
 
     // m_oi = new OI();
@@ -174,8 +174,10 @@ public class Robot extends TimedRobot {
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.
    */
+  public double testvar;
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("testvar", testvar);
 
     SRXwrist.setSensorPhase(false);
     SRXwrist.setInverted(true);
@@ -202,9 +204,10 @@ public class Robot extends TimedRobot {
         robot.cancel();
       }
       else {
+        LowHatch.cancel();
         robot.start();
+        drive.PIDstop();
       }
-      //drive.PIDstop();
     //}
 
    /// SmartDashboard.putNumber("pov", _joy.getPOV());                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ,
