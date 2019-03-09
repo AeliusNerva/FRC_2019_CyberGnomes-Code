@@ -42,7 +42,7 @@ public class Xoffsetlineup extends Command {
 		} catch (Exception e) {
 	
 		}
-    if (XOffset > -4 && XOffset < 4) {
+    if (XOffset > -2 && XOffset < 2) {
       done = true;
     }
   }

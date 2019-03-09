@@ -533,6 +533,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			VisionValues = table.getEntry("VisionResults").getString("").split(",");
 			XOffset = Double.parseDouble(VisionValues[2]);
 			offsetangle = Double.parseDouble(VisionValues[4]);
+			
 		} catch (Exception e) {
 	
 		}
