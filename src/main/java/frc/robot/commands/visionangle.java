@@ -50,17 +50,21 @@ public class visionangle extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    SmartDashboard.putString("VisionAngle is Finished", "True");
     return done;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    SmartDashboard.putString("Hit End Condition", "True");
+    Robot.drive.PIDstop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.drive.PIDstop();
   }
 }

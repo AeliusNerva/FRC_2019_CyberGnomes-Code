@@ -17,6 +17,7 @@ public class lowHatch extends CommandGroup {
    */
   public lowHatch() {
     addSequential(new zeroDrive());
+    addSequential(new visionwrite());
     addSequential(new Xoffsetlineup());
     addSequential(new visionwrite());
     addSequential(new visionangle(testvar));
