@@ -36,7 +36,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 	Joystick _bakcupJoy = new Joystick(1);
 	double radians, angle, temp, A2, B2, R, A, B, C, D, ws1, ws2, ws3, ws4, wa1, wa2, wa3, wa4, max, currentAngle,
 			rotationAmmount, FWD, STR, RCW, currentAngle2, currentAngle3, currentAngle4, rotationAmmount2,
-			rotationAmmount3, rotationAmmount4,offsetangle; // defining variables 
+			rotationAmmount3, rotationAmmount4,offsetangle,disfromtarget; // defining variables 
 	boolean firstrun = false;
 	// defining motor controlers and encoders
 	WPI_TalonSRX SRXsteer = new WPI_TalonSRX(OI.SRXtoprightsteer);
@@ -180,6 +180,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			VisionValues = table.getEntry("VisionResults").getString("").split(",");
 			XOffset = Double.parseDouble(VisionValues[2]);
 			offsetangle = Double.parseDouble(VisionValues[4]);
+			disfromtarget = Double.parseDouble(VisionValues[3]);
 			SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
 			SmartDashboard.putNumber("offset", Double.parseDouble(VisionValues[4]));
 		} catch (Exception e) {
@@ -403,55 +404,6 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			MAXdrive3.set(-.5);
 			MAXdrive4.set(-.5);
 	}
-	public void moveforwardtoposition() {
-		SmartDashboard.putNumber("encoderdrive1",Encoder.getPosition());
-		SmartDashboard.putNumber("encoderdrive2",Encoder2.getPosition());
-		SmartDashboard.putNumber("encoderdrive3",Encoder3.getPosition());
-		SmartDashboard.putNumber("encoderdrive4",Encoder4.getPosition());
-		drive1.setP(2);
-		drive1.setI(0);
-		drive1.setD(.5);
-		drive1.setIZone(0);
-		drive1.setFF(0);
-		drive1.setOutputRange(-1, 1);
-		drive2.setP(2);
-		drive2.setI(0);
-		drive2.setD(.5);
-		drive2.setIZone(0);
-		drive2.setFF(0);
-		drive2.setOutputRange(-1, 1);
-		drive3.setP(2);
-		drive3.setI(0);
-		drive3.setD(.5);
-		drive3.setIZone(0);
-		drive3.setFF(0);
-		drive3.setOutputRange(-1, 1);
-		drive4.setP(2);
-		drive4.setI(0);
-		drive4.setD(.5);
-		drive4.setIZone(0);
-		drive4.setFF(0);
-		drive4.setOutputRange(-1, 1);
-		rotationAmmount = Math.IEEEremainder(0 - currentAngle, 360); // calculating ammount to move wheel
-		rotationAmmount2 = Math.IEEEremainder(0 - currentAngle2, 360); // calculating ammount to move wheel
-		rotationAmmount3 = Math.IEEEremainder(0 - currentAngle3, 360); // calculating ammount to move wheel
-		rotationAmmount4 = Math.IEEEremainder(0 - currentAngle4, 360); // calculating ammount to move wheel
-
-			SRXsteer.set(ControlMode.MotionMagic, (currentAngle + rotationAmmount) * 26.006); // moving the wheel to the
-			// required position
-			SRXsteer2.set(ControlMode.MotionMagic, (currentAngle2 + rotationAmmount2) * 26.006); // moving the wheel to
-																									// the
-			// required position
-			SRXsteer3.set(ControlMode.MotionMagic, (currentAngle3 + rotationAmmount3) * 26.006); // moving the wheel to
-																									// the
-			// required position
-			SRXsteer4.set(ControlMode.MotionMagic, (currentAngle4 + rotationAmmount4) * 26.006); // moving the wheel to
-																									// the
-			drive1.setReference(-10, ControlType.kPosition);
-			drive2.setReference(10, ControlType.kPosition);
-			drive3.setReference(10, ControlType.kPosition);
-			drive4.setReference(-10, ControlType.kPosition);
-	}	
 	String[] VisionValues;
 	// network table init
 	NetworkTable table;
@@ -464,7 +416,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 		SmartDashboard.putNumber("encoderdrive3",Encoder3.getPosition());
 		SmartDashboard.putNumber("encoderdrive4",Encoder4.getPosition());
 		SmartDashboard.putNumber("aaaa", 90291);
-		double speed = .34;
+		double speed = .5;
 		double P = 1;
 		double I = 0;
 		double D = .0;
@@ -525,6 +477,74 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			}
 
 	}	
+	public void movefowardtoposition() {
+		SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
+		SmartDashboard.putNumber("encoderdrive1",Encoder.getPosition());
+		SmartDashboard.putNumber("encoderdrive2",Encoder2.getPosition());
+		SmartDashboard.putNumber("encoderdrive3",Encoder3.getPosition());
+		SmartDashboard.putNumber("encoderdrive4",Encoder4.getPosition());
+		SmartDashboard.putNumber("aaaa", 90291);
+		double speed = .34;
+		double P = 1;
+		double I = 0;
+		double D = .0;
+		double F = 0;
+		double IZ = 0;
+		double ramp = .25;
+		MAXdrive.setClosedLoopRampRate(ramp);
+		MAXdrive2.setClosedLoopRampRate(ramp);
+		MAXdrive3.setClosedLoopRampRate(ramp);
+		MAXdrive4.setClosedLoopRampRate(ramp);
+		drive1.setP(P);
+		drive1.setI(I);
+		drive1.setD(D);
+		drive1.setIZone(IZ);
+		drive1.setFF(F);
+		drive1.setOutputRange(-speed, speed);
+		drive2.setP(P);
+		drive2.setI(I);
+		drive2.setD(D);
+		drive2.setIZone(IZ);
+		drive2.setFF(F);
+		drive2.setOutputRange(-speed, speed);
+		drive3.setP(P);
+		drive3.setI(I);
+		drive3.setD(D);
+		drive3.setIZone(IZ);
+		drive3.setFF(F);
+		drive3.setOutputRange(-speed, speed);
+		drive4.setP(P);
+		drive4.setI(I);
+		drive4.setD(D);
+		drive4.setIZone(IZ);
+		drive4.setFF(F);
+		drive4.setOutputRange(-speed, speed);
+		rotationAmmount = Math.IEEEremainder(0 - currentAngle, 360); // calculating ammount to move wheel
+		rotationAmmount2 = Math.IEEEremainder(0 - currentAngle2, 360); // calculating ammount to move wheel
+		rotationAmmount3 = Math.IEEEremainder(0 - currentAngle3, 360); // calculating ammount to move wheel
+		rotationAmmount4 = Math.IEEEremainder(0 - currentAngle4, 360); // calculating ammount to move wheel
+
+			SRXsteer.set(ControlMode.MotionMagic, (currentAngle + rotationAmmount) * 26.006); // moving the wheel to the
+			// required position
+			SRXsteer2.set(ControlMode.MotionMagic, (currentAngle2 + rotationAmmount2) * 26.006); // moving the wheel to
+																									// the
+			// required position
+			SRXsteer3.set(ControlMode.MotionMagic, (currentAngle3 + rotationAmmount3) * 26.006); // moving the wheel to
+																									// the
+			// required position
+			SRXsteer4.set(ControlMode.MotionMagic, (currentAngle4 + rotationAmmount4) * 26.006); // moving the wheel to
+																									// the
+			try {
+				double rotationsPerInch = 1.4556;
+				double ticks = (10 - disfromtarget)/rotationsPerInch;
+				drive1.setReference(-ticks, ControlType.kPosition);
+				drive2.setReference(ticks, ControlType.kPosition);
+				drive3.setReference(ticks, ControlType.kPosition);
+				drive4.setReference(-ticks, ControlType.kPosition);
+			} catch (Exception e) {
+			}
+
+	}	
 	public void visionwrite() {
 		
 		try {
@@ -533,7 +553,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			VisionValues = table.getEntry("VisionResults").getString("").split(",");
 			XOffset = Double.parseDouble(VisionValues[2]);
 			offsetangle = Double.parseDouble(VisionValues[4]);
-			
+			disfromtarget = Double.parseDouble(VisionValues[3]);
 		} catch (Exception e) {
 	
 		}
@@ -592,6 +612,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 	}
 	public void PIDstop(){
 		try {
+			SmartDashboard.putString("TurnController", "Disabled");
 			turnController.disable();
 		} catch (Exception e) {
 		}

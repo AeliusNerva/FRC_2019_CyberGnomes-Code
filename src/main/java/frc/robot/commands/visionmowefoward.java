@@ -8,10 +8,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.*;
-public class zeroDrive extends Command {
-  boolean done = false;
-  public zeroDrive() {
+import frc.robot.Robot;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+public class visionmowefoward extends Command {
+  boolean done;
+  double disfromtgt;
+  public visionmowefoward() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -19,14 +24,24 @@ public class zeroDrive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    done = false;
+    done = false; 
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drive.zero();
-    done = true;  
+    Robot.drive.movefowardtoposition();
+    try {
+			NetworkTableInstance inst = NetworkTableInstance.getDefault();
+			NetworkTable table = inst.getTable("CVResultsTable");
+			String[] VisionValues = table.getEntry("VisionResults").getString("").split(",");
+			disfromtgt = Double.parseDouble(VisionValues[3]);
+		} catch (Exception e) {
+	
+		}
+    if (disfromtgt > 5 && disfromtgt < 15) {
+      done = true;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -38,6 +53,7 @@ public class zeroDrive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.drive.PIDstop();
   }
 
   // Called when another command which requires one or more of the same

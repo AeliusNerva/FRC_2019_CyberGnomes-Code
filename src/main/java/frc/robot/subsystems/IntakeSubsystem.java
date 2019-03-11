@@ -22,10 +22,10 @@ public class IntakeSubsystem extends Subsystem {
   // here. Call these from Commands.
 
   public void succ() {
-    SPXintake.set(ControlMode.PercentOutput, .6); //will spin the the intake to the set ammount
+    SPXintake.set(ControlMode.PercentOutput, 1); //will spin the the intake to the set ammount
   }
   public void push() {
- SPXintake.set(ControlMode.PercentOutput, -.6);
+ SPXintake.set(ControlMode.PercentOutput, -1);
   }
   public void stall() {
     SPXintake.set(ControlMode.PercentOutput, 0.3); 

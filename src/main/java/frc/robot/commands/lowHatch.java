@@ -8,7 +8,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class lowHatch extends CommandGroup {
   public double testvar;
@@ -21,6 +21,9 @@ public class lowHatch extends CommandGroup {
     addSequential(new Xoffsetlineup());
     addSequential(new visionwrite());
     addSequential(new visionangle(testvar));
+    addSequential(new zeroDrive());
+   // addSequential(new visionwrite());
+    //addSequential(new visionmowefoward());
     
     //addSequential(new visionwrite());
     // Add Commands here:

@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
 		SRXwrist.configPeakOutputReverse(-1, kTimeoutMs);
 		SRXwrist.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
 		SRXwrist.configMotionCruiseVelocity(15000, kTimeoutMs);
-		SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
+		SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
 
 		SRXwrist.config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
 		SRXwrist.config_kP(kPIDLoopIdx, 40, kTimeoutMs);
@@ -177,6 +177,14 @@ public class Robot extends TimedRobot {
   public double testvar;
   @Override
   public void robotPeriodic() {
+    try {
+			NetworkTableInstance inst = NetworkTableInstance.getDefault();
+			table = inst.getTable("CVResultsTable");
+      VisionValues = table.getEntry("VisionResults").getString("").split(",");
+      SmartDashboard.putString("tableresults", table.getEntry("VisionResults").getString(""));
+		} catch (Exception e) {
+	
+		}
     SmartDashboard.putNumber("testvar", testvar);
 
     SRXwrist.setSensorPhase(false);

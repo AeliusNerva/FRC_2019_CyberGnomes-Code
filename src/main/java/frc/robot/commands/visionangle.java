@@ -16,7 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 public class visionangle extends Command {
-  boolean done;
+  boolean done = false;
   double offset;
   public visionangle(double testvar2) {
     // Use requires() here to declare subsystem dependencies
@@ -27,6 +27,7 @@ public class visionangle extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    done = false;
     Robot.drive.readyToRotate();
     //Robot.drive.zero();
   }
@@ -39,26 +40,27 @@ public class visionangle extends Command {
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			NetworkTable table = inst.getTable("CVResultsTable");
 			String[] VisionValues = table.getEntry("VisionResults").getString("").split(",");
-			offset = Double.parseDouble(VisionValues[4]);
+      offset = Double.parseDouble(VisionValues[4]);
+      SmartDashboard.putNumber("Vision Angle Offset:", offset);
+      SmartDashboard.putBoolean("done", done);  
+      if (offset > -2.0f && offset < 2.0f) {
+        done = true;
+      }
 		} catch (Exception e) {
     }
-    if (offset > -2 && offset < 2) {
-			done = true;
-		}
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    SmartDashboard.putString("VisionAngle is Finished", "True");
     return done;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    SmartDashboard.putString("Hit End Condition", "True");
-    Robot.drive.PIDstop();
+    Robot.drive.PIDstop();  
+    SmartDashboard.putNumber("Hit End Condition", 1234);
   }
 
   // Called when another command which requires one or more of the same

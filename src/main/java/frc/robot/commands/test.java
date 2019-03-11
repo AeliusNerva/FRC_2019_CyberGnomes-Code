@@ -8,10 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.*;
-public class zeroDrive extends Command {
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class test extends Command {
   boolean done = false;
-  public zeroDrive() {
+  public test() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -19,14 +19,13 @@ public class zeroDrive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    done = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drive.zero();
-    done = true;  
+    SmartDashboard.putNumber("is done", 12309);
+    done = true;
   }
 
   // Make this return true when this Command no longer needs to run execute()

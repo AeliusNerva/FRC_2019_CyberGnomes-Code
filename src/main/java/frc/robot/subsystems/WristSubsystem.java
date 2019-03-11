@@ -27,56 +27,85 @@ public class WristSubsystem extends Subsystem {
   SRXwrist = new WPI_TalonSRX(OI.SRXwrist);
   CANSparkMax MAXlift = new CANSparkMax(OI.MAXleftlift, MotorType.kBrushless);
   public CANEncoder Encoder = new CANEncoder(MAXlift);
+  boolean limiting = true;
+  int peak = 35;
+  int peaktimems = 200;
+  int limt = 30;
   public WristSubsystem(){
+
  
   }
   public void reset() {
+
     SRXwrist.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
   }
   public void initDefaultCommand() {
   }
   public void movetoHatchPosition() { // move wrist to hatch position
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
     if (Encoder.getPosition() < 90) {
-      SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
-    SRXwrist.set(ControlMode.MotionMagic,475);
+      SRXwrist.configMotionAcceleration(800, kTimeoutMs);// orignal 200
+    SRXwrist.set(ControlMode.MotionMagic,250);
     }
     else if (Encoder.getPosition() < 200) {
-      SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
-      SRXwrist.set(ControlMode.MotionMagic,475);
+      SRXwrist.configMotionAcceleration(800, kTimeoutMs);// orignal 200
+      SRXwrist.set(ControlMode.MotionMagic,800);
     }
     else {
-      SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
+      SRXwrist.configMotionAcceleration(800, kTimeoutMs);// orignal 200
       SRXwrist.set(ControlMode.MotionMagic,750);
     }
   }
   public void movetoBallPosition() { // move wrist to ball position
-    SRXwrist.set(ControlMode.MotionMagic,650);//orgi -650
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
+    SRXwrist.set(ControlMode.MotionMagic,625);//orgi -650
   }
   public void movetoScoreBallPosition() { // move wrist to ball position
-        
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
     SmartDashboard.putNumber("test1234", 12345);
     if (Encoder.getPosition() < 90) {
-      SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
+      SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
     SRXwrist.set(ControlMode.MotionMagic,400);
     }
     else if (Encoder.getPosition() < 200) {
-      SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
-      SRXwrist.set(ControlMode.MotionMagic,475);
+      SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
+      SRXwrist.set(ControlMode.MotionMagic,800);
     }
     else {
-      SRXwrist.configMotionAcceleration(200, kTimeoutMs);// orignal 200
+      SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
       SRXwrist.set(ControlMode.MotionMagic,720);
     }
   }
   public void movetoHomePosition() { // move wrist to home position
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
     SRXwrist.set(ControlMode.MotionMagic,0);
   }
 
   public void in() { // moves the wrist at set speed
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
     SRXwrist.set(ControlMode.PercentOutput,1); 
     SmartDashboard.putNumber("www", 13290593);
   }
   public void out() { // moves the wrist at set speed
+    SRXwrist.configContinuousCurrentLimit(limt);
+    SRXwrist.configPeakCurrentLimit(peak);
+    SRXwrist.configPeakCurrentDuration(peaktimems);
+    SRXwrist.enableCurrentLimit(limiting);
     SRXwrist.set(ControlMode.PercentOutput,-1); 
   }
   public void stop() {
