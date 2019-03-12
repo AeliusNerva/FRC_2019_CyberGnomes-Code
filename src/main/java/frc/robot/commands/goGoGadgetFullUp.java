@@ -32,7 +32,7 @@ public class goGoGadgetFullUp extends Command {
   @Override
   protected void execute() {
     Robot.gadget.doubleDown();
-    if (Encoder.getPosition() > 75 && Encoder2.getPosition() > 75){
+    if (Encoder.getPosition() > 99 && Encoder2.getPosition() > 99){
 
       end = true;
     }

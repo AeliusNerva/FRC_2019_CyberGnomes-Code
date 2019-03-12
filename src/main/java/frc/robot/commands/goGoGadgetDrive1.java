@@ -35,6 +35,7 @@ public class goGoGadgetDrive1 extends Command {
      //   end = true;
      // }
      // else {
+       Robot.drive.movesideways();
        Robot.gadgetdrive.manuadrive();
       //}
 

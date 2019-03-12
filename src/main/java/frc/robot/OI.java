@@ -22,7 +22,7 @@ public class OI {
   Joystick _joy = new Joystick(0);
   Button button1 = new JoystickButton(_joy, 1);
   public OI() { 
-    button1.whenPressed(new lowHatch());
+    //button1.whenPressed(new lowHatch());
     // button1.whenReleased(new TurnPIDoff());
   }
   public static double L = 24.05; 

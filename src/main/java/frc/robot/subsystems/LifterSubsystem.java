@@ -76,8 +76,8 @@ public class LifterSubsystem extends Subsystem {
     lift2.setFF(0);
     lift2.setOutputRange(-1, 1);
     // setting PID values
-    lift.setReference(320, ControlType.kPosition);
-    lift2.setReference(-320, ControlType.kPosition);//orginal 320
+    lift.setReference(280, ControlType.kPosition);
+    lift2.setReference(-280, ControlType.kPosition);//orginal 320
   }
   public void GoToMidBallPosition() { // moving to given position
     // setting PID values
@@ -95,8 +95,8 @@ public class LifterSubsystem extends Subsystem {
   lift2.setFF(0);
   lift2.setOutputRange(-1, 1);
   // setting PID values
-  lift.setReference(160, ControlType.kPosition);
-  lift2.setReference(-160, ControlType.kPosition);//orginal 320
+  lift.setReference(165, ControlType.kPosition);
+  lift2.setReference(-165, ControlType.kPosition);//orginal 320
 }
 public void GoToLowBallPosition() { // moving to given position
   // setting PID values
@@ -114,8 +114,8 @@ lift2.setIZone(0);
 lift2.setFF(0);
 lift2.setOutputRange(-1, 1);
 // setting PID values
-lift.setReference(100, ControlType.kPosition);
-lift2.setReference(-100, ControlType.kPosition);//orginal 320
+lift.setReference(37, ControlType.kPosition);
+lift2.setReference(-37, ControlType.kPosition);//orginal 320
 }
 public void GoToHighHatchPosition() { // moving to given position
   // setting PID values
@@ -133,8 +133,8 @@ lift2.setIZone(0);
 lift2.setFF(0);
 lift2.setOutputRange(-1, 1);
 // setting PID values
-lift.setReference(300, ControlType.kPosition);
-lift2.setReference(-300, ControlType.kPosition);//orginal 320
+lift.setReference(280, ControlType.kPosition);
+lift2.setReference(-280, ControlType.kPosition);//orginal 320
 }
 public void GoToMidHatchPosition() { // moving to given position
 // setting PID values
@@ -152,8 +152,8 @@ lift2.setIZone(0);
 lift2.setFF(0);
 lift2.setOutputRange(-1, 1);
 // setting PID values
-lift.setReference(140, ControlType.kPosition);
-lift2.setReference(-140, ControlType.kPosition);//orginal 320
+lift.setReference(135, ControlType.kPosition);
+lift2.setReference(-135, ControlType.kPosition);//orginal 320
 }
 public void GoToLowHatchPosition() { // moving to given position
 // setting PID values
@@ -171,9 +171,28 @@ lift2.setIZone(0);
 lift2.setFF(0);
 lift2.setOutputRange(-1, 1);
 // setting PID values
-lift.setReference(80, ControlType.kPosition);
-lift2.setReference(-80, ControlType.kPosition);//orginal 320
+lift.setReference(20, ControlType.kPosition);
+lift2.setReference(-20, ControlType.kPosition);//orginal 320
 }
+public void GoToCargoShipPosition() { // moving to given position
+  // setting PID values
+  lift.setP(1);
+  lift.setI(0);
+  lift.setD(0);
+  lift.setIZone(0);
+  lift.setFF(0);
+  lift.setOutputRange(-1, 1);
+  
+  lift2.setP(1);
+  lift2.setI(0);
+  lift2.setD(0);
+  lift2.setIZone(0);
+  lift2.setFF(0);
+  lift2.setOutputRange(-1, 1);
+  // setting PID values
+  lift.setReference(100, ControlType.kPosition);
+  lift2.setReference(-100, ControlType.kPosition);//orginal 320
+  }
   public void movetoGrabHatch() {
           // setting PID values
           lift.setP(1);

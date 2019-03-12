@@ -190,35 +190,24 @@ public class Robot extends TimedRobot {
     SRXwrist.setSensorPhase(false);
     SRXwrist.setInverted(true);
     SmartDashboard.putNumber("gadgetdrivewheelenc", SRXgadgetDrive.getSelectedSensorPosition());
-   if (_backupJoy.getPOV() == 90 || _backupJoy.getPOV() == 270) {
+   if (_backupJoy.getPOV() == 90 || _backupJoy.getPOV() == 270 || _joy.getPOV() == 90 || _joy.getPOV() == 270 ) {
       goGoGadget.start();
     }
     if (_backupJoy.getRawButton(10)) {
       goGoGadget.cancel();
       gadget.stop();
     }
-  
+    robot.start();
     
-   // if (_joy.getRawButton(1)) {
-   //   SmartDashboard.putNumber("check", 87987);
-   //   LowHatch.start();
-      //drive.moveforwardtoposition();
-      //drive.readyToRotate();
-      //drive.rotateToAngle();
-   //   robot.cancel();
-   // }
-    //else {
-      if(_joy.getRawButton(1)) {
+
+      /*if(_joy.getRawButton(1)) {
         robot.cancel();
       }
       else {
         LowHatch.cancel();
         robot.start();
         drive.PIDstop();
-      }
-    //}
-
-   /// SmartDashboard.putNumber("pov", _joy.getPOV());                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ,
+      }*/    
   }
 
   /**

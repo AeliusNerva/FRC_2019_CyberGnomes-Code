@@ -16,10 +16,10 @@ public class goGoGadget extends CommandGroup {
   public goGoGadget() {
     addSequential(Robot.fullup);
     addSequential(Robot.drive1);
-    addSequential(Robot.frontdown);
-    addSequential(Robot.drive2);
-    addSequential(Robot.backdown);
-    addSequential(Robot.drive3);
+    //addSequential(Robot.frontdown);
+    //addSequential(Robot.drive2);
+    //addSequential(Robot.backdown);
+    //addSequential(Robot.drive3);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

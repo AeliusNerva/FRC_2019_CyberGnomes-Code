@@ -22,12 +22,19 @@ public class RobotFunctions extends Command {
   public CANPIDController lift2 = new CANPIDController(MAXlift2);
   public CANEncoder Encoder = new CANEncoder(MAXlift);
   public CANEncoder Encoder2 = new CANEncoder(MAXlift2);
+  CANSparkMax MAXgadgetlift = new CANSparkMax(OI.MAXleftGadget, MotorType.kBrushless);
+  CANSparkMax MAXgadgetlift2 = new CANSparkMax(OI.MAXrightgadget, MotorType.kBrushless);
+  public CANPIDController gadgetlift = new CANPIDController(MAXgadgetlift);
+  public CANPIDController gadgetlift2 = new CANPIDController(MAXgadgetlift2);
+  public CANEncoder EncoderGad = new CANEncoder(MAXgadgetlift);
+  public CANEncoder Encoder2Gad = new CANEncoder(MAXgadgetlift2);
   WPI_TalonSRX SRXwrist = new WPI_TalonSRX(OI.SRXwrist);
   int i;
   long startTime = System.currentTimeMillis();
   boolean GrabBall, GrabDisk, ReleaceBall, ReleaceDisk, ManualWrist, ManualLift, ManualGadget, test, stop  = false;
   Joystick _joy = new Joystick(0);
   Joystick _backupJoy = new Joystick(1);
+  String Object= "N/A";
   public RobotFunctions() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -36,18 +43,48 @@ public class RobotFunctions extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.lift.movetoHome();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    SmartDashboard.putNumber("encoder1", EncoderGad.getPosition());
+    SmartDashboard.putNumber("encoder2", Encoder2Gad.getPosition());
+    if (_joy.getRawButton(4)) { // High 4 bar pos
+      if (Object == "Ball") {
+        Robot.lift.GoToHighBallPosition();
+      }
+      else if (Object == "Disc") {
+        Robot.lift.GoToHighHatchPosition();
+      }
+    }
+    if (_joy.getRawButton(3)) { // Mid 4 bar pos
+      if (Object == "Ball") {
+        Robot.lift.GoToMidBallPosition();
+      }
+      else if (Object == "Disc") {
+        Robot.lift.GoToMidHatchPosition();
+      }
+    }
+    if (_joy.getRawButton(2)) { // Low 4 bar pos
+      if (Object == "Ball") {
+      Robot.lift.GoToLowBallPosition();
+      }
+      else if (Object == "Disc") {
+        Robot.lift.GoToLowHatchPosition();
+      }
+    }
+    if (_joy.getRawButton(1)) { // CargoShip 4 bar pos
+      Robot.lift.GoToCargoShipPosition();
+    }
     SmartDashboard.putNumber("wristpos", SRXwrist.getSelectedSensorPosition(0));
-  //  if (_backupJoy.getRawButton(9)) {
-  //    Robot.gadget.backUp();
- //     Robot.gadget.frontUp();
-   // }
+    if (_backupJoy.getRawButton(9)) {
+     Robot.gadget.backUp();
+     Robot.gadget.frontUp();
+    }
     if (_backupJoy.getRawButton(13)) {
-      
+      Robot.gadget.zero();
       Robot.lift.init();
       Robot.wrist.reset();
       Robot.gadget.reset();
@@ -61,6 +98,7 @@ public class RobotFunctions extends Command {
       Robot.wrist.movetoBallPosition();
       Robot.intake.succ();
       GrabBall = true;
+      Object = "Ball";
     }
     else if (GrabBall) {
       Robot.wrist.movetoHomePosition();
@@ -74,6 +112,7 @@ public class RobotFunctions extends Command {
       Robot.intake.stop();
       Robot.pnumatics.retract();
       GrabDisk = true;
+      Object = "Disc";
     }
     else if (GrabDisk) {
       Robot.wrist.movetoHomePosition();
@@ -143,7 +182,7 @@ public class RobotFunctions extends Command {
       Robot.lift.stop();
       ManualLift = false;
     }
-   if (_joy.getPOV() == 90 || _joy.getPOV() == 270) {
+  /* if (_joy.getPOV() == 90 || _joy.getPOV() == 270) {
       while (_joy.getPOV() == 90) {
         Robot.gadget.up();
       }
@@ -154,8 +193,7 @@ public class RobotFunctions extends Command {
     }
     else if (ManualGadget) {
       Robot.gadget.stop();
-    }
-   // Robot.drive.Swerve();
+    }*/
     }
 
   // Make this return true when this Command no longer needs to run execute()
