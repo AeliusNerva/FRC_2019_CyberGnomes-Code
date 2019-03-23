@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
 import frc.robot.commands.TurnPIDoff;
+import frc.robot.commands.goGoGadget;
 import frc.robot.commands.lowHatch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,8 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class OI {
   Joystick _joy = new Joystick(0);
+  Joystick _backupJoy = new Joystick(1);
   Button button1 = new JoystickButton(_joy, 1);
+  POVButton POV = new POVButton(_joy, 90);
+  POVButton POV2 = new POVButton(_backupJoy, 90);
   public OI() { 
+
+    POV.whenPressed(new goGoGadget());
+    POV2.whenPressed(new goGoGadget());
     //button1.whenPressed(new lowHatch());
     // button1.whenReleased(new TurnPIDoff());
   }
@@ -35,14 +42,14 @@ public class OI {
   public static int MAXrightlift = 5;
   public static int MAXleftlift = 15;
   public static int MAXleftGadget = 6;
-  public static int MAXrightgadget = 18;
+  public static int MAXrightgadget = 25;
   public static int SPXintake = 8;
   public static int SRXtopleftsteer = 9;
   public static int SRXtoprightsteer = 10;
   public static int SRXbottomleftsteer = 11;
   public static int SRXbottomrightsteer = 12;
   public static int SRXwrist = 13;
-  public static int SRXgadgetDrive = 14;
+  //public static int SRXgadgetDrive = 14;
 
     
 }

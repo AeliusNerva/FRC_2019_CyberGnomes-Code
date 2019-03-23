@@ -17,14 +17,16 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.OI;
+import frc.robot.Robot;
+import frc.robot.commands.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+//import edu.wpi.first.networktables.NetworkTable;
+//import edu.wpi.first.networktables.NetworkTableEntry;
+//import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * Add your docs here.
@@ -59,6 +61,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 	@Override
 	public void initDefaultCommand() {
+		setDefaultCommand(new Swerve());
 	}
 
 	public void init() {
@@ -90,6 +93,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 		SRXsteer.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
 		SRXsteer.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
 		SRXsteer.setSensorPhase(false);
+		SRXsteer.setInverted(false);
 
 		SRXsteer.selectProfileSlot(0, kPIDLoopIdx);
 		SRXsteer.configNominalOutputForward(0, kTimeoutMs);
@@ -110,7 +114,8 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 		SRXsteer2.setSelectedSensorPosition(absolutePosition2, kPIDLoopIdx, kTimeoutMs);
 		SRXsteer2.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
-		SRXsteer2.setSensorPhase(false);
+		SRXsteer2.setSensorPhase(true);
+		SRXsteer2.setInverted(true);
 
 		SRXsteer2.configNominalOutputForward(0, kTimeoutMs);
 		SRXsteer2.configNominalOutputReverse(0, kTimeoutMs);
@@ -130,7 +135,8 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 		SRXsteer3.setSelectedSensorPosition(absolutePosition3, kPIDLoopIdx, kTimeoutMs);
 		SRXsteer3.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
-		SRXsteer3.setSensorPhase(false);
+		SRXsteer3.setSensorPhase(true);
+		SRXsteer3.setInverted(true);
 
 		SRXsteer3.configNominalOutputForward(0, kTimeoutMs);
 		SRXsteer3.configNominalOutputReverse(0, kTimeoutMs);
@@ -150,7 +156,8 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 		SRXsteer4.setSelectedSensorPosition(absolutePosition4, kPIDLoopIdx, kTimeoutMs);
 		SRXsteer4.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
-		SRXsteer4.setSensorPhase(false);
+		SRXsteer4.setInverted(true);
+		SRXsteer4.setSensorPhase(true);
 
 		SRXsteer4.configNominalOutputForward(0, kTimeoutMs);
 		SRXsteer4.configNominalOutputReverse(0, kTimeoutMs);
@@ -173,7 +180,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 
 	public void Swerve() {
 
-		try {
+	/*	try {
 			//zero();
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			table = inst.getTable("CVResultsTable");
@@ -185,11 +192,11 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			SmartDashboard.putNumber("offset", Double.parseDouble(VisionValues[4]));
 		} catch (Exception e) {
 	
-		}
+		}*/
 		angle = ahrs.getYaw(); // defining variable for gyro
 		radians = angle * Math.PI / 180;
 		currentAngle = SRXsteer.getSelectedSensorPosition(0) / 25.930555555555; // setting the current angle of the
-																				// wheel 11.4666 = tick per rotation/360
+																			// wheel 11.4666 = tick per rotation/360
 		currentAngle2 = SRXsteer2.getSelectedSensorPosition(0) / 25.930555555555;
 		currentAngle3 = SRXsteer3.getSelectedSensorPosition(0) / 25.930555555555;
 		currentAngle4 = SRXsteer4.getSelectedSensorPosition(0) / 25.930555555555;
@@ -384,6 +391,29 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 		SmartDashboard.putNumber("ANGLE", ahrs.getAngle());
 	}
 	public void movesideways() {
+		//Robot.pnumatics.shiftlow();
+		rotationAmmount = Math.IEEEremainder(270 - currentAngle, 360); // calculating ammount to move wheel
+		rotationAmmount2 = Math.IEEEremainder(270 - currentAngle2, 360); // calculating ammount to move wheel
+		rotationAmmount3 = Math.IEEEremainder(270 - currentAngle3, 360); // calculating ammount to move wheel
+		rotationAmmount4 = Math.IEEEremainder(270 - currentAngle4, 360); // calculating ammount to move wheel
+
+			SRXsteer.set(ControlMode.MotionMagic, (currentAngle + rotationAmmount) * 26.006); // moving the wheel to the
+			// required position
+			SRXsteer2.set(ControlMode.MotionMagic, (currentAngle2 + rotationAmmount2) * 26.006); // moving the wheel to
+																									// the
+			// required position
+			SRXsteer3.set(ControlMode.MotionMagic, (currentAngle3 + rotationAmmount3) * 26.006); // moving the wheel to
+																									// the
+			// required position
+			SRXsteer4.set(ControlMode.MotionMagic, (currentAngle4 + rotationAmmount4) * 26.006); // moving the wheel to
+																									// the
+			MAXdrive.set(-1);
+			MAXdrive2.set(1);
+			MAXdrive3.set(1);
+			MAXdrive4.set(-1);
+	}
+	public void movesidewaysSlow() {
+		// Robot.pnumatics.shiftlow();
 		rotationAmmount = Math.IEEEremainder(270 - currentAngle, 360); // calculating ammount to move wheel
 		rotationAmmount2 = Math.IEEEremainder(270 - currentAngle2, 360); // calculating ammount to move wheel
 		rotationAmmount3 = Math.IEEEremainder(270 - currentAngle3, 360); // calculating ammount to move wheel
@@ -400,17 +430,17 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			SRXsteer4.set(ControlMode.MotionMagic, (currentAngle4 + rotationAmmount4) * 26.006); // moving the wheel to
 																									// the
 			MAXdrive.set(-.5);
-			MAXdrive2.set(-.5);
-			MAXdrive3.set(-.5);
+			MAXdrive2.set(.5);
+			MAXdrive3.set(.5);
 			MAXdrive4.set(-.5);
 	}
-	String[] VisionValues;
+/*	String[] VisionValues;
 	// network table init
 	NetworkTable table;
-	double XOffset;
+	double XOffset;*/
 	// network table init
 	public void movesidewaystoposition() {
-		SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
+	/*	//SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
 		SmartDashboard.putNumber("encoderdrive1",Encoder.getPosition());
 		SmartDashboard.putNumber("encoderdrive2",Encoder2.getPosition());
 		SmartDashboard.putNumber("encoderdrive3",Encoder3.getPosition());
@@ -474,11 +504,11 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 				drive3.setReference(ticks, ControlType.kPosition);
 				drive4.setReference(-ticks, ControlType.kPosition);
 			} catch (Exception e) {
-			}
+			}*/
 
 	}	
 	public void movefowardtoposition() {
-		SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
+		/*SmartDashboard.putNumber("xOFFSET", Double.parseDouble(VisionValues[2]));
 		SmartDashboard.putNumber("encoderdrive1",Encoder.getPosition());
 		SmartDashboard.putNumber("encoderdrive2",Encoder2.getPosition());
 		SmartDashboard.putNumber("encoderdrive3",Encoder3.getPosition());
@@ -542,11 +572,11 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 				drive3.setReference(ticks, ControlType.kPosition);
 				drive4.setReference(-ticks, ControlType.kPosition);
 			} catch (Exception e) {
-			}
+			}*/
 
 	}	
 	public void visionwrite() {
-		
+	/*	
 		try {
 			NetworkTableInstance inst = NetworkTableInstance.getDefault();
 			table = inst.getTable("CVResultsTable");
@@ -556,7 +586,7 @@ public class DriveSubsystem extends Subsystem implements PIDOutput{
 			disfromtarget = Double.parseDouble(VisionValues[3]);
 		} catch (Exception e) {
 	
-		}
+		}*/
 	}	
 	public void stop() {
 		SRXsteer.set(0);	

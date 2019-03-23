@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
 public class goGoGadgetDrive1 extends Command {
   boolean end = false;
-  WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
+ // WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
   public goGoGadgetDrive1() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -23,20 +23,20 @@ public class goGoGadgetDrive1 extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-   setTimeout(2);
-    SRXgadgetDrive.setSelectedSensorPosition(0);
+   setTimeout(1);
+    //SRXgadgetDrive.setSelectedSensorPosition(0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("drivewheelenc", SRXgadgetDrive.getSelectedSensorPosition());
+    //SmartDashboard.putNumber("drivewheelenc", SRXgadgetDrive.getSelectedSensorPosition());
      // if (SRXgadgetDrive.getSelectedSensorPosition() == -100000) {
      //   end = true;
      // }
      // else {
        Robot.drive.movesideways();
-       Robot.gadgetdrive.manuadrive();
+      // Robot.gadgetdrive.manuadrive();
       //}
 
   }
@@ -50,7 +50,7 @@ public class goGoGadgetDrive1 extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.gadgetdrive.stopdrive();
+   // Robot.gadgetdrive.stopdrive();
   }
 
   // Called when another command which requires one or more of the same

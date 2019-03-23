@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class PnumaticSubsystem extends Subsystem {
   // defining solenoids
-  Solenoid grab = new Solenoid(1);
-  Solenoid shifter = new Solenoid(0);
+  Solenoid grab = new Solenoid(0);
+  Solenoid shifter = new Solenoid(1);
   // defining solenoids
 
   // Put methods for controlling this subsystem
@@ -34,9 +34,9 @@ public class PnumaticSubsystem extends Subsystem {
     grab.set(true);
   }
   public void shiftlow() { // shifts to Low gear 
-    shifter.set(false);
+    shifter.set(true);
   }
   public void shifthigh() { // shifts to High gear 
-    shifter.set(true);
+    shifter.set(false);
   }
 }

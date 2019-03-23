@@ -17,11 +17,11 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.Joystick;
 public class RobotFunctions extends Command {
   CANSparkMax MAXlift = new CANSparkMax(OI.MAXleftlift, MotorType.kBrushless);
-  CANSparkMax MAXlift2 = new CANSparkMax(OI.MAXrightlift, MotorType.kBrushless);
+  //CANSparkMax MAXlift2 = new CANSparkMax(OI.MAXrightlift, MotorType.kBrushless);
   public CANPIDController lift = new CANPIDController(MAXlift);
-  public CANPIDController lift2 = new CANPIDController(MAXlift2);
+  //public CANPIDController lift2 = new CANPIDController(MAXlift2);
   public CANEncoder Encoder = new CANEncoder(MAXlift);
-  public CANEncoder Encoder2 = new CANEncoder(MAXlift2);
+ // public CANEncoder Encoder2 = new CANEncoder(MAXlift2);
   CANSparkMax MAXgadgetlift = new CANSparkMax(OI.MAXleftGadget, MotorType.kBrushless);
   CANSparkMax MAXgadgetlift2 = new CANSparkMax(OI.MAXrightgadget, MotorType.kBrushless);
   public CANPIDController gadgetlift = new CANPIDController(MAXgadgetlift);
@@ -31,10 +31,10 @@ public class RobotFunctions extends Command {
   WPI_TalonSRX SRXwrist = new WPI_TalonSRX(OI.SRXwrist);
   int i;
   long startTime = System.currentTimeMillis();
-  boolean GrabBall, GrabDisk, ReleaceBall, ReleaceDisk, ManualWrist, ManualLift, ManualGadget, test, stop  = false;
+  boolean GrabBall, GrabDisk, ReleaceBall, ReleaceDisk, ManualWrist, ManualLift, ManualGadget, test, stop, GrabDisk2, GrabBall2  = false;
   Joystick _joy = new Joystick(0);
   Joystick _backupJoy = new Joystick(1);
-  String Object= "N/A";
+  String Object= "Disc";
   public RobotFunctions() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -49,6 +49,14 @@ public class RobotFunctions extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if (_joy.getRawButton(2) && _joy.getRawButton(9)) {
+      Robot.lift.down();
+    }
+    if (_joy.getRawButton(12) || _backupJoy.getRawButton(12)) {
+      Robot.wrist.stop();
+      Robot.lift.stop();
+      Robot.intake.stop();
+    }
     SmartDashboard.putNumber("encoder1", EncoderGad.getPosition());
     SmartDashboard.putNumber("encoder2", Encoder2Gad.getPosition());
     if (_joy.getRawButton(4)) { // High 4 bar pos
@@ -80,19 +88,18 @@ public class RobotFunctions extends Command {
     }
     SmartDashboard.putNumber("wristpos", SRXwrist.getSelectedSensorPosition(0));
     if (_backupJoy.getRawButton(9)) {
-     Robot.gadget.backUp();
-     Robot.gadget.frontUp();
+     Robot.gadget.doubleUp();
     }
-    if (_backupJoy.getRawButton(13)) {
+    if (_backupJoy.getRawButton(13) || _backupJoy.getRawButton(13)) {
       Robot.gadget.zero();
       Robot.lift.init();
       Robot.wrist.reset();
       Robot.gadget.reset();
-      Robot.lift.init();
+      //Robot.lift.init();
     }
-      Robot.drive.Swerve();
+      //Robot.drive.Swerve();
 
-    if (_joy.getRawButton(7) || _backupJoy.getRawButton(7)) { // on press ready and spinning on releace ball is stowed
+    if (_joy.getRawButton(7)) { // on press ready and spinning on releace ball is stowed
       Robot.lift.movetoHome();
       Robot.pnumatics.grab();
       Robot.wrist.movetoBallPosition();
@@ -106,7 +113,7 @@ public class RobotFunctions extends Command {
       stop = true;
       GrabBall = false;
     }
-    if (_joy.getRawButton(5) || _backupJoy.getRawButton(5)) { // on press ready to grab hatch on releace grab hatch
+    if (_joy.getRawButton(5)) { // on press ready to grab hatch on releace grab hatch
       Robot.lift.movetoGrabHatch();
       Robot.wrist.movetoHatchPosition();
       Robot.intake.stop();
@@ -115,8 +122,43 @@ public class RobotFunctions extends Command {
       Object = "Disc";
     }
     else if (GrabDisk) {
-      Robot.wrist.movetoHomePosition();
       Robot.pnumatics.grab();
+      try {
+        Thread.sleep(250);
+     } catch (Exception e) {
+        System.out.println(e);
+     }
+     Robot.wrist.movetoHomePosition();
+      GrabDisk2 = false;
+    }
+    if (_backupJoy.getRawButton(7)) { // on press ready and spinning on releace ball is stowed
+      Robot.pnumatics.grab();
+      Robot.wrist.movetoBallPosition();
+      Robot.intake.succ();
+      GrabBall2 = true;
+      Object = "Ball";
+    }
+    else if (GrabBall2) {
+      Robot.wrist.movetoHomePosition();
+      Robot.intake.stall();
+      stop = true;
+      GrabBall2 = false;
+    }
+    if (_backupJoy.getRawButton(5)) { // on press ready to grab hatch on releace grab hatch
+      Robot.wrist.movetoHatchPosition();
+      Robot.intake.stop();
+      Robot.pnumatics.retract();
+      GrabDisk2 = true;
+      Object = "Disc";
+    }
+    else if (GrabDisk2) {
+      Robot.pnumatics.grab();
+      try {
+        Thread.sleep(250);
+     } catch (Exception e) {
+        System.out.println(e);
+     }
+     Robot.wrist.movetoHomePosition();
       GrabDisk = false;
     }
     if (_joy.getRawButton(11) || _backupJoy.getRawButton(11)) { // on press shift to low on releace shift to high
@@ -158,13 +200,13 @@ public class RobotFunctions extends Command {
     }
     if (_backupJoy.getRawButton(2) || _backupJoy.getRawButton(4)) { // triangle button lift up x button lift down
       if (_backupJoy.getRawButton(9) == false) {
-        if (_backupJoy.getRawButton(2) && Encoder.getPosition() > 5) {
+        if (_backupJoy.getRawButton(2) && Encoder.getPosition() < -5) {
           Robot.lift.up();
         }
         if (_backupJoy.getRawButton(4)) {
           Robot.lift.down();
         }
-        if (Encoder.getPosition() < 5 && _backupJoy.getRawButtonReleased(4)) {
+        if (Encoder.getPosition() > -5 && _backupJoy.getRawButtonReleased(4)) {
           Robot.lift.stop();
         }
       }

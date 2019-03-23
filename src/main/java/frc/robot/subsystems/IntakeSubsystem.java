@@ -28,7 +28,7 @@ public class IntakeSubsystem extends Subsystem {
  SPXintake.set(ControlMode.PercentOutput, -1);
   }
   public void stall() {
-    SPXintake.set(ControlMode.PercentOutput, 0.3); 
+    SPXintake.set(ControlMode.PercentOutput, 0.1); 
   }
   public void stop() {
     SPXintake.set(ControlMode.PercentOutput, 0);

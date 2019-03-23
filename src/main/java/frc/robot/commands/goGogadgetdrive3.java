@@ -63,7 +63,7 @@ public class goGogadgetdrive3 extends Command {
   @Override
   protected void end() {
     Robot.drive.stop();
-    Robot.gadgetdrive.stopdrive();
+   // Robot.gadgetdrive.stopdrive();
   }
 
   // Called when another command which requires one or more of the same

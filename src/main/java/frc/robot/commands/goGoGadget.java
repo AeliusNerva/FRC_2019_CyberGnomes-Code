@@ -14,11 +14,11 @@ public class goGoGadget extends CommandGroup {
    * Add your docs here.
    */
   public goGoGadget() {
-    addSequential(Robot.fullup);
-    addSequential(Robot.drive1);
-    //addSequential(Robot.frontdown);
-    //addSequential(Robot.drive2);
-    //addSequential(Robot.backdown);
+    addSequential(new goGoGadgetFullUp());
+    addSequential(new goGoGadgetDrive1());
+    addSequential(new goGoGadgetFrontDown());
+    addSequential(new goGogadgetdrive2());
+    addSequential(new goGoGadgetbackdown());
     //addSequential(Robot.drive3);
     // Add Commands here:
     // e.g. addSequential(new Command1());

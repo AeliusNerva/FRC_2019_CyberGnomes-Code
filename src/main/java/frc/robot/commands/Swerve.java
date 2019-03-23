@@ -8,50 +8,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.*;
-import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.*;
+import frc.robot.Robot;
 
-public class goGogadgetdrive2 extends Command {
-  boolean end = false;
-  //WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
-  public goGogadgetdrive2() {
+public class Swerve extends Command {
+  public Swerve() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(Robot.drive);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    setTimeout(1);
-    //SRXgadgetDrive.setSelectedSensorPosition(0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      //Robot.gadgetdrive.manuadrive();
-      Robot.drive.movesidewaysSlow();
+    Robot.drive.Swerve();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return isTimedOut();
+    return false;
   }
 
   // Called once after isFinished returns true
-  @
-  Override
+  @Override
   protected void end() {
-    Robot.drive.stop();
-    //Robot.gadgetdrive.stopdrive();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.drive.stop();
   }
 }

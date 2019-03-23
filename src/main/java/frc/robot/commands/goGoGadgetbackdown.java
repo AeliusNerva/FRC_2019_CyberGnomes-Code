@@ -34,8 +34,10 @@ public class goGoGadgetbackdown extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.drive.stop();
     SmartDashboard.putNumber("enc2", Encoder2.getPosition());
     Robot.gadget.backUp();
+  //  Robot.gadgetdrive.stopdrive();
     if (Encoder.getPosition() < 3){
       end = true;
     }

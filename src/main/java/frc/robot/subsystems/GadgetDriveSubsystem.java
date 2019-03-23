@@ -17,7 +17,7 @@ import frc.robot.*;
  * Add your docs here.
  */
 public class GadgetDriveSubsystem extends Subsystem {
-  WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
+  //WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
@@ -26,7 +26,7 @@ public class GadgetDriveSubsystem extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-  public void driveToPosition1() {
+ /* public void driveToPosition1() {
     int kTimeoutMs = 10;
 		int kPIDLoopIdx = 0;
 
@@ -56,5 +56,5 @@ public class GadgetDriveSubsystem extends Subsystem {
   }
   public void stopdrive() {
     SRXgadgetDrive.set(0);
-  }
+  }*/
 }

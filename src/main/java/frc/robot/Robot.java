@@ -40,7 +40,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class Robot extends TimedRobot {
   public static OI m_oi;
-  WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
+  //WPI_TalonSRX SRXgadgetDrive = new WPI_TalonSRX(OI.SRXgadgetDrive);
 
   WPI_TalonSRX SRXwrist = new WPI_TalonSRX(OI.SRXwrist);
   int kTimeoutMs = 10;
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   public static goGoGadgetFrontDown frontdown = null;
   public static goGoGadgetbackdown backdown = null;
   public static goGoGadgetFullUp fullup = null;
-  public static goGoGadget goGoGadget = null;
+  //public static goGoGadget goGoGadget = null;
   public static goGoGadgetDrive1 drive1 = null;
   public static goGogadgetdrive2 drive2 = null;
   public static goGogadgetdrive3 drive3 = null;
@@ -86,7 +86,6 @@ public class Robot extends TimedRobot {
 	public CANEncoder Encoder2 = new CANEncoder(MAXdrive2);
 	public CANEncoder Encoder3 = new CANEncoder(MAXdrive3);
   public CANEncoder Encoder4 = new CANEncoder(MAXdrive4);
-  private Boolean ran = false;
 	// defining motor controlers and encoders
   // command and subsystem calls
   /**
@@ -95,7 +94,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    ran = true;
     m_oi = new OI();
 		int kTimeoutMs = 10;
 		int kPIDLoopIdx = 0;
@@ -103,7 +101,7 @@ public class Robot extends TimedRobot {
     int absolutePosition = SRXwrist.getSelectedSensorPosition(kTimeoutMs) & 0xFFF;
     double encoderval = 0;
 
-		SRXwrist.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
+		//SRXwrist.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
 		SRXwrist.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
     SRXwrist.setInverted(false);
 		SRXwrist.selectProfileSlot(0, kPIDLoopIdx);
@@ -113,10 +111,9 @@ public class Robot extends TimedRobot {
 		SRXwrist.configPeakOutputReverse(-1, kTimeoutMs);
 		SRXwrist.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
 		SRXwrist.configMotionCruiseVelocity(15000, kTimeoutMs);
-		SRXwrist.configMotionAcceleration(400, kTimeoutMs);// orignal 200
 
 		SRXwrist.config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
-		SRXwrist.config_kP(kPIDLoopIdx, 40, kTimeoutMs);
+		SRXwrist.config_kP(kPIDLoopIdx, 1, kTimeoutMs);
 		SRXwrist.config_kI(kPIDLoopIdx, 0, kTimeoutMs);
 		SRXwrist.config_kD(kPIDLoopIdx, 0, kTimeoutMs);
 		//SRXwrist.setSelectedSensorPosition(0, 0, 0);
@@ -128,7 +125,8 @@ public class Robot extends TimedRobot {
     Encoder2.setPosition(0);
     Encoder3.setPosition(0);
     Encoder4.setPosition(0);
-    SRXwrist.setSelectedSensorPosition(0, 0, 0);
+    
+    //SRXwrist.setSelectedSensorPosition(0, 0, 0);
     // network table init
    // NetworkTableInstance inst = NetworkTableInstance.getDefault();
    // table = inst.getTable("CVResultsTable");
@@ -150,7 +148,7 @@ public class Robot extends TimedRobot {
     drive1 = new goGoGadgetDrive1();
     drive2 = new goGogadgetdrive2();
     drive3 = new goGogadgetdrive3();
-    goGoGadget = new goGoGadget();
+   // goGoGadget = new goGoGadget();
     LowHatch = new lowHatch();
     //xOfset = new XOfset();
     
@@ -187,18 +185,15 @@ public class Robot extends TimedRobot {
 		}
     SmartDashboard.putNumber("testvar", testvar);
 
-    SRXwrist.setSensorPhase(false);
-    SRXwrist.setInverted(true);
-    SmartDashboard.putNumber("gadgetdrivewheelenc", SRXgadgetDrive.getSelectedSensorPosition());
-   if (_backupJoy.getPOV() == 90 || _backupJoy.getPOV() == 270 || _joy.getPOV() == 90 || _joy.getPOV() == 270 ) {
-      goGoGadget.start();
+    SRXwrist.setSensorPhase(true);
+    SRXwrist.setInverted(false);
+    //SmartDashboard.putNumber("gadgetdrivewheelenc", SRXgadgetDrive.getSelectedSensorPosition());
+    if (_backupJoy.getPOV() == 90 || _backupJoy.getPOV() == 270 || _joy.getPOV() == 90 || _joy.getPOV() == 270 ) {
+      robot.cancel();
     }
-    if (_backupJoy.getRawButton(10)) {
-      goGoGadget.cancel();
-      gadget.stop();
-    }
+    else {
     robot.start();
-    
+    }
 
       /*if(_joy.getRawButton(1)) {
         robot.cancel();

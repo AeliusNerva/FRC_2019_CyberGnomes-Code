@@ -35,8 +35,10 @@ public class goGoGadgetFrontDown extends Command {
   @Override
   protected void execute() {
     SmartDashboard.putNumber("enc2", Encoder2.getPosition());
+   // Robot.gadgetdrive.stopdrive();
+    Robot.drive.stop();
     Robot.gadget.frontUp();
-    if (Encoder2.getPosition() < 3 || Encoder.getPosition() < 3){
+    if (Encoder2.getPosition() < 4){
       end = true;
     }
   }

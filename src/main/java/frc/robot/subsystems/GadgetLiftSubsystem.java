@@ -79,8 +79,29 @@ public class GadgetLiftSubsystem extends Subsystem {
     gadgetlift2.setFF(0);
     gadgetlift2.setOutputRange(-1, 1);
     // setting PID values
-    gadgetlift.setReference(202/2, ControlType.kPosition);
-    gadgetlift2.setReference(202/2, ControlType.kPosition);
+    gadgetlift.setReference(152.5/2, ControlType.kPosition);
+    gadgetlift2.setReference(152.5/2, ControlType.kPosition);
+  }
+  public void doubleUp() {
+    SmartDashboard.putNumber("encoder1", Encoder.getPosition());
+    SmartDashboard.putNumber("encoder2", Encoder2.getPosition());
+    // setting PID values
+    gadgetlift.setP(2);
+    gadgetlift.setI(0);
+    gadgetlift.setD(.5);
+    gadgetlift.setIZone(0);
+    gadgetlift.setFF(0);  
+    gadgetlift.setOutputRange(-1, 1);
+
+    gadgetlift2.setP(2);
+    gadgetlift2.setI(0);
+    gadgetlift2.setD(.75);
+    gadgetlift2.setIZone(0);
+    gadgetlift2.setFF(0);
+    gadgetlift2.setOutputRange(-1, 1);
+    // setting PID values
+    gadgetlift.setReference(0, ControlType.kPosition);
+    gadgetlift2.setReference(0, ControlType.kPosition);
   }
   public void frontUp() {
     SmartDashboard.putNumber("encoder1", Encoder.getPosition());
@@ -101,6 +122,7 @@ public class GadgetLiftSubsystem extends Subsystem {
     gadgetlift2.setOutputRange(-1, 1);
     // setting PID values
     gadgetlift2.setReference(0, ControlType.kPosition);
+    gadgetlift.setReference(152.5, ControlType.kPosition);
   }
   public void backUp() {
     SmartDashboard.putNumber("encoder1", Encoder.getPosition());
